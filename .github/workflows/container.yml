@@ -14,9 +14,6 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
     steps:
       - uses: actions/checkout@v2
       - run: npm install
@@ -28,3 +25,12 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+
+      - run: |
+        aws cloudfront create-invalidation --distribution-id "$AWS_DISTRIBUTION_ID" --path "/container/latest/index.html"
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DISTRIBUTION_ID: ${{ secret.AWS_DISTRIBUTION_ID }}
