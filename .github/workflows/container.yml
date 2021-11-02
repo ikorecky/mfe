@@ -14,8 +14,8 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+    permissions: read-all|write-all
+    
     steps:
       - uses: actions/checkout@v2
       
